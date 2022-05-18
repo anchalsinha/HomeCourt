@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHHA68SH2044",
         "name": "com.UCLA.InteractiveSystemsFinalProject",
-        "processId": 2692,
+        "processId": 6310,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -42,6 +42,12 @@
             "deviceId": "1WMHHA68SH2044",
             "name": "com.UCLA.InteractiveSystemsFinalProject",
             "processId": 2692,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 6310,
             "exited": false
         }
     ],
