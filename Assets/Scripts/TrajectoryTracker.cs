@@ -14,8 +14,8 @@ public class TrajectoryTracker : MonoBehaviour
 
     private bool isRecording;
 
-    private List<Transform> recordedTransforms;
-    private List<Snapshot> recording;
+    private List<Transform> recordedTransforms = new List<Transform>();
+    private List<Snapshot> recording = new List<Snapshot>();
     private int count = 0;
 
     void Start()
@@ -44,11 +44,8 @@ public class TrajectoryTracker : MonoBehaviour
                 count++;
                 Debug.Log("Stop Recording");
                 // SaveClip();
-                Debug.Log($"Instantiate {count}");
                 var guide = Instantiate(playbackHand, Vector3.zero, Quaternion.identity);
-                Debug.Log("Get Player");
                 TrajectoryPlayer guidePlayer = guide.GetComponent<TrajectoryPlayer>();
-                Debug.Log("Load");
                 guidePlayer.Load(recording, guide.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList());
             }
         }
@@ -57,21 +54,27 @@ public class TrajectoryTracker : MonoBehaviour
     void TakeSnapshot() 
     {
         var states = new State[recordedTransforms.Count];
+        Debug.Log("Initialized States");
         for (var i = 0; i < states.Length; i++)
         {
             var t = recordedTransforms[i];
+            Debug.Log("Get Transform");
             var state = new State();
             state.Position = t.position;
             state.Rotation = t.rotation.eulerAngles;
             state.Scale = t.lossyScale;
+            Debug.Log("Update State");
             states[i] = state;
+            Debug.Log("Assign State");
         }
-
+        Debug.Log("Done getting states");
         var snapshot = new Snapshot();
         snapshot.Time = Time.time;
         snapshot.States = states;
+        Debug.Log("Update snapshot");
 
         recording.Add(snapshot);
+        Debug.Log("Added snapshot");
     }
 
     void SaveClip()
