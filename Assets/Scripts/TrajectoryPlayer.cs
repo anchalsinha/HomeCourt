@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TrajectoryPlayer : MonoBehaviour
@@ -8,40 +9,26 @@ public class TrajectoryPlayer : MonoBehaviour
     private List<Snapshot> snapshots;
     private List<Transform> transforms;
 
-    public float TimeScale
-    {
-        get => timeScale;
-        set => timeScale = value;
-    }
-
-    public void Start()
-    {
-
-    }
-
-    public void Load(List<Snapshot> snapshots, List<Transform> transforms)
-    {
-        time = 0;
-        frame = 1;
-        minTime = snapshots[0].Time;
-        maxTime = snapshots[snapshots.Count - 1].Time;
-        this.snapshots = snapshots;
-        this.transforms = transforms;
-    }
-
     private int frame = 1;
     private float time = 0;
     private float minTime;
     private float maxTime;
 
+    public void Start()
+    {
+        transforms = GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
+    }
+
+    public void Load(List<Snapshot> snapshots)
+    {
+        minTime = snapshots[0].Time;
+        maxTime = snapshots[snapshots.Count - 1].Time;
+        this.snapshots = snapshots;
+    }
+
     private void Update()
     {
-        if (snapshots == null || snapshots.Count == 0)
-        {
-            return;
-        }
-        
-        time = Mathf.Clamp(time + UnityEngine.Time.deltaTime * TimeScale, minTime, maxTime);
+        time = Mathf.Clamp(time + Time.deltaTime * timeScale, minTime, maxTime);
                 
         var (prev, next) = GetSnapshots();
 
@@ -53,8 +40,7 @@ public class TrajectoryPlayer : MonoBehaviour
             var prevState = prev.States[i];
             var nextState = next.States[i];
             transform.position = Vector3.Lerp(prevState.Position, nextState.Position, snapshotDelta);
-            transform.eulerAngles = Quaternion.Lerp(Quaternion.Euler(prevState.Rotation), Quaternion.Euler(nextState.Rotation), snapshotDelta)
-                .eulerAngles;
+            transform.eulerAngles = Quaternion.Lerp(Quaternion.Euler(prevState.Rotation), Quaternion.Euler(nextState.Rotation), snapshotDelta).eulerAngles;
             transform.localScale = Vector3.Lerp(prevState.Scale, nextState.Scale, snapshotDelta);
         }
     }
@@ -62,39 +48,14 @@ public class TrajectoryPlayer : MonoBehaviour
     {
         while (true)
         {
-            if (TimeScale > 0)
-            {
-                var sample = snapshots[frame];
-                if (sample.Time >= time)
-                {
-                    break;
-                }
-
-                frame++;
-            }
-            else
-            {
-                var sample = snapshots[frame];
-                if (sample.Time <= time)
-                {
-                    break;
-                }
-
-                frame--;
-            }
+            var s = snapshots[frame];
+            if (s.Time >= time)
+                break;
+            frame++;
         }
 
-        if (TimeScale > 0)
-        {
-            var prev = snapshots[frame - 1];
-            var next = snapshots[frame];
-            return (prev, next);
-        }
-        else
-        {
-            var prev = snapshots[frame + 1];
-            var next = snapshots[frame];
-            return (prev, next);
-        }
+        var prev = snapshots[frame - 1];
+        var next = snapshots[frame];
+        return (prev, next);
     }
 }

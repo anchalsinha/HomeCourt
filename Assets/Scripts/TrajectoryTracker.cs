@@ -7,8 +7,7 @@ using Oculus.Interaction.Input;
 public class TrajectoryTracker : MonoBehaviour
 {
     public GameObject rightHand, leftHand;
-
-    public GameObject playbackHand;
+    public GameObject guideHand;
 
     private Hand gestureHand;
 
@@ -18,11 +17,16 @@ public class TrajectoryTracker : MonoBehaviour
     private List<Snapshot> recording = new List<Snapshot>();
     private int count = 0;
 
+
+    private GameObject playbackHandInstance;
+
+
     void Start()
     {
         gestureHand = leftHand.GetComponent<Hand>();
         recordedTransforms = rightHand.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
         Debug.Log($"Recorded transforms: {recordedTransforms.Count}");
+
     }
 
     void Update()
@@ -43,10 +47,15 @@ public class TrajectoryTracker : MonoBehaviour
                 isRecording = false;
                 count++;
                 Debug.Log("Stop Recording");
-                // SaveClip();
-                var guide = Instantiate(playbackHand, Vector3.zero, Quaternion.identity);
-                TrajectoryPlayer guidePlayer = guide.GetComponent<TrajectoryPlayer>();
-                guidePlayer.Load(recording, guide.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList());
+
+                // show playback
+                if (playbackHandInstance)
+                    Destroy(playbackHandInstance);
+                playbackHandInstance = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
+                var guidePlayer = guideHand.GetComponent<TrajectoryPlayer>();
+                guidePlayer.Load(recording);
+
+                SerializeRecording();
             }
         }
     }
@@ -77,8 +86,10 @@ public class TrajectoryTracker : MonoBehaviour
         Debug.Log("Added snapshot");
     }
 
-    void SaveClip()
+    void SerializeRecording()
     {
-        Debug.Log("Save Clip");
+        string recording_string = JsonUtility.ToJson(recording);
+        recording.Clear();
+        Debug.Log(recording_string);
     }
 }
