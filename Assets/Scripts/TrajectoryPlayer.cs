@@ -19,15 +19,18 @@ public class TrajectoryPlayer : MonoBehaviour
         transforms = GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
     }
 
-    public void Load(List<Snapshot> snapshots)
+    public void Load(List<Snapshot> recording)
     {
-        minTime = snapshots[0].Time;
-        maxTime = snapshots[snapshots.Count - 1].Time;
-        this.snapshots = snapshots;
+        minTime = recording[0].Time;
+        maxTime = recording[recording.Count - 1].Time;
+        snapshots = new List<Snapshot>(recording);
     }
 
     private void Update()
     {
+        if (snapshots.Count == 0)
+            return;
+
         time = Mathf.Clamp(time + Time.deltaTime * timeScale, minTime, maxTime);
                 
         var (prev, next) = GetSnapshots();

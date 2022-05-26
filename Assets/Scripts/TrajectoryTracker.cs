@@ -52,7 +52,7 @@ public class TrajectoryTracker : MonoBehaviour
                 if (playbackHandInstance)
                     Destroy(playbackHandInstance);
                 playbackHandInstance = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
-                var guidePlayer = guideHand.GetComponent<TrajectoryPlayer>();
+                var guidePlayer = playbackHandInstance.GetComponent<TrajectoryPlayer>();
                 guidePlayer.Load(recording);
 
                 SerializeRecording();
@@ -63,27 +63,20 @@ public class TrajectoryTracker : MonoBehaviour
     void TakeSnapshot() 
     {
         var states = new State[recordedTransforms.Count];
-        Debug.Log("Initialized States");
         for (var i = 0; i < states.Length; i++)
         {
             var t = recordedTransforms[i];
-            Debug.Log("Get Transform");
             var state = new State();
             state.Position = t.position;
             state.Rotation = t.rotation.eulerAngles;
             state.Scale = t.lossyScale;
-            Debug.Log("Update State");
             states[i] = state;
-            Debug.Log("Assign State");
         }
-        Debug.Log("Done getting states");
         var snapshot = new Snapshot();
         snapshot.Time = Time.time;
         snapshot.States = states;
-        Debug.Log("Update snapshot");
 
         recording.Add(snapshot);
-        Debug.Log("Added snapshot");
     }
 
     void SerializeRecording()
