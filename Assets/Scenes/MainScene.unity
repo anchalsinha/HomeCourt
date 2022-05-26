@@ -331,6 +331,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Trackable
       objectReference: {fileID: 0}
+    - target: {fileID: 7061959791384906321, guid: 61197b333efce455ab5605bdca42a1cd, type: 3}
+      propertyPath: _trackingOriginType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61197b333efce455ab5605bdca42a1cd, type: 3}
 --- !u!1 &1636647055612845547 stripped
