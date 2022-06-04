@@ -4,11 +4,12 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 public class GameController : MonoBehaviour
 {
     public GameObject guideHand;
-    string trajectoryFilename;
+    public string trajectoryFilename;
 
     private TrajectoryPlayer guidePlayer;
     void Start()
@@ -27,8 +28,7 @@ public class GameController : MonoBehaviour
         var loadRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, trajectoryFilename));
         yield return loadRequest.SendWebRequest();
 
-        var guide = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
-        List<Snapshot> recording = JsonUtility.FromJson<List<Snapshot>>(Encoding.UTF8.GetString(loadRequest.downloadHandler.data));
+        List<Snapshot> recording = JsonConvert.DeserializeObject<List<Snapshot>>(Encoding.UTF8.GetString(loadRequest.downloadHandler.data));
         guidePlayer.Load(recording);
     }
 }

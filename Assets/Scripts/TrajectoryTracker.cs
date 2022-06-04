@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using UnityEngine;
 using Oculus.Interaction.Input;
+using Newtonsoft.Json;
 
 public class TrajectoryTracker : MonoBehaviour
 {
@@ -81,8 +83,14 @@ public class TrajectoryTracker : MonoBehaviour
 
     void SerializeRecording()
     {
-        string recording_string = JsonUtility.ToJson(recording);
+        string recording_string = JsonConvert.SerializeObject(recording);
         recording.Clear();
-        Debug.Log(recording_string);
+
+        string fname = System.DateTime.Now.ToString("HH-mm-ss") + ".json";
+        string path = Path.Combine(Application.persistentDataPath, fname);
+        Debug.Log($"Recording saved: {path}");
+        StreamWriter writer = new StreamWriter(path);
+        writer.WriteLine(recording_string);
+        writer.Close();
     }
 }
