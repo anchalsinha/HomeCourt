@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using Newtonsoft.Json;
 using Oculus;
 
@@ -21,6 +22,10 @@ public class GameController : MonoBehaviour
     public string trajectoryFilename;
     private GameState state;
 
+    public Text mainText;
+    public Text scoreText;
+    public Text feedbackText;
+
     public Transform startSwing, endSwing;
     public GameObject tennisBall;
 
@@ -30,6 +35,7 @@ public class GameController : MonoBehaviour
     private MeshRenderer startEndpointRenderer, endEndpointRenderer;
 
     private bool inEvaluatingState = false;
+    private char grade = 'x';
 
     void Start()
     {
@@ -54,14 +60,15 @@ public class GameController : MonoBehaviour
     void Update()
     {
         if (state == GameState.START) {
-            //
+            // placeholder / initialization state
+            UpdateText(mainText, TextConstants.START_GAME);
         } else if (state == GameState.WAIT_TRAJ) {
+            UpdateText(mainText, TextConstants.AWAITING_SWING);
+            UpdateText(feedbackText, GetScoreFeedback());
+
             guidePlayer.PlayGuideTrajectory();
             if (!tracker.TrackSwing())
                 changeState();
-            
-            // choose when to display/hide start/end points
-            // add line render to user's swing while recording
         } else if (state == GameState.EVAL_TRAJ) {
             // discretize recording data to match user data length
             // evaluate using metric
@@ -87,6 +94,61 @@ public class GameController : MonoBehaviour
 
         changeState();
         inEvaluatingState = false;
+    }
+
+    void UpdateText(Text t, string s) {
+        t.text = s;
+
+        if (t == feedbackText) {
+            switch (grade) {
+                case 'A': case 'a':
+                    t.color = Color.green;
+                    break;
+                case 'B': case 'b':
+                case 'C': case 'c':
+                    t.color = Color.yellow;
+                    break;
+                case 'D': case 'd':
+                case 'F': case 'f':
+                    t.color = Color.red;
+                    break;
+                default:
+                    t.color = Color.white;
+                    break;
+            }
+        }
+    }
+
+    private string GetScoreFeedback() {
+        switch (grade) {
+            case 'X': case 'x': // no swings performed yet
+                return "";
+            case 'A': case 'a':
+                return TextConstants.SWING_FEEDBACK_A;
+            case 'B': case 'b':
+                return TextConstants.SWING_FEEDBACK_B;
+            case 'C': case 'c':
+                return TextConstants.SWING_FEEDBACK_C;
+            case 'D': case 'd':
+                return TextConstants.SWING_FEEDBACK_D;
+            case 'F': case 'f':
+                return TextConstants.SWING_FEEDBACK_F;
+            default:
+                return "";
+        }
+    }
+
+    private char getGrade(float score) {
+        if (score >= ScoreConstants.SCORE_THRESH_A)
+            return 'A';
+        else if (score < ScoreConstants.SCORE_THRESH_A && score >= ScoreConstants.SCORE_THRESH_B)
+            return 'B';
+        else if (score < ScoreConstants.SCORE_THRESH_B && score >= ScoreConstants.SCORE_THRESH_C)
+            return 'C';
+        else if (score < ScoreConstants.SCORE_THRESH_C && score >= ScoreConstants.SCORE_THRESH_D)
+            return 'D';
+        else
+            return 'F';
     }
 
     void changeState() {

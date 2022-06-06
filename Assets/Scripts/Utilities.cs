@@ -10,6 +10,26 @@ public static class Constants
     public static int NUM_TRAJECTORY_POINTS = 100;
 }
 
+public static class TextConstants
+{
+    public static string START_GAME       = "\n\nHello!\n\nWelcome to HomeCourt!";
+    public static string AWAITING_SWING   = "\nMatch the guide as closely as possible to learn how to do a proper forehand.\n\n" +
+                                            "Swing through the red spheres to get your swing evaluated!";
+    public static string SWING_FEEDBACK_A = "\nAmazing Swing!\nKeep it up!";
+    public static string SWING_FEEDBACK_B = "\nGreat One!\nNow swing for perfection!";
+    public static string SWING_FEEDBACK_C = "\nGood Swing!\nTry to follow the guide even closer for better results!";
+    public static string SWING_FEEDBACK_D = "\nNot bad, but could be better!\nFollow the guide as close as possible!";
+    public static string SWING_FEEDBACK_F = "\nYikes! Try that again!";
+}
+
+public static class ScoreConstants
+{
+    public static float SCORE_THRESH_A = 0.90f;
+    public static float SCORE_THRESH_B = 0.80f;
+    public static float SCORE_THRESH_C = 0.70f;
+    public static float SCORE_THRESH_D = 0.60f;
+}
+
 public static class Utilities
 {
     public static List<Vector3> Discretize(List<Vector3> trajectory)
