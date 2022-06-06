@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 
 public enum GameState {
     START,
-    PLAY_GUIDE,
     WAIT_TRAJ,
     EVAL_TRAJ,
 }
@@ -38,19 +37,25 @@ public class GameController : MonoBehaviour
     {
         if (state == GameState.START) {
             //
-        } else if (state == GameState.PLAY_GUIDE) {
-            if (!guidePlayer.PlayGuideTrajectory())
-                changeState();
         } else if (state == GameState.WAIT_TRAJ) {
-            // if (!TrajectoryTracker.TrackSwing())
-            //     changeState();
+            guidePlayer.PlayGuideTrajectory();
+            if (!TrajectoryTracker.TrackSwing())
+                changeState();
+            // choose when to display/hide start/end points
+            // add line render to user's swing while recording
         } else if (state == GameState.EVAL_TRAJ) {
-            //
+            // discretize recording data to match user data length
+            // evaluate using metric
+            // display score/grade based on metric results
+            // reset back to WAIT_TRAJ state via changeState();
         }
     }
 
     void changeState() {
-        state++;
+        if      (state == GameState.START)      state = GameState.WAIT_TRAJ;
+        else if (state == GameState.WAIT_TRAJ)  state = GameState.EVAL_TRAJ;
+        else if (state == GameState.EVAL_TRAJ)  state = GameState.WAIT_TRAJ;
+
         Debug.Log(state);
     }
 
