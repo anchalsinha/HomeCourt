@@ -31,6 +31,9 @@ public class TrajectoryPlayer : MonoBehaviour
         if (snapshots.Count == 0)
             return;
 
+        if (frame == snapshots.Count - 1)
+            frame = 0;
+
         time = Mathf.Clamp(time + Time.deltaTime * timeScale, minTime, maxTime);
                 
         var (prev, next) = GetSnapshots();
