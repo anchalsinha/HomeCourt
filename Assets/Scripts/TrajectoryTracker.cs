@@ -18,26 +18,36 @@ public class TrajectoryTracker : MonoBehaviour
     private List<Transform> recordedTransforms = new List<Transform>();
     private List<Snapshot> recording = new List<Snapshot>();
 
-    private GameController gameController;
+    public float lineWidth;
+    private LineRenderer lineRenderer;
+
+    void Awake()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+    }
 
     void Start()
     {
         recordedTransforms = rightHand.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
-        gameController = GetComponent<GameController>();
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
     }
 
     public void SwingStarted()
     {
         swingStarted = true;
-        gameController.EnableStartSwing();
     }
 
     public void SwingEnded()
     {
-        gameController.EnableEndSwing();
+        swingEnded = true;
     }
 
     public bool TrackSwing() {
+        if (!isRecording && !swingStarted) {
+            swingEnded = false;
+        }
+
         if (!isRecording && swingStarted) {
             isRecording = true;
             Debug.Log("Start Recording");
@@ -50,7 +60,7 @@ public class TrajectoryTracker : MonoBehaviour
             isRecording = false;
             Debug.Log("Stop Recording");
             swingStarted = false;
-            SerializeRecording();
+            swingEnded = false;
             return false;
         }
 
@@ -74,6 +84,9 @@ public class TrajectoryTracker : MonoBehaviour
         snapshot.States = states;
 
         recording.Add(snapshot);
+        lineRenderer.positionCount += 1;
+        Vector3 pos = states[Constants.PALM_CENTER_MARKER_ID].Position;
+        lineRenderer.SetPosition(lineRenderer.positionCount - 1, new Vector3(pos.x, pos.y, pos.z));
     }
 
     void SerializeRecording()

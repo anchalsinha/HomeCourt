@@ -35,10 +35,9 @@ public class GameController : MonoBehaviour
         
         StartCoroutine(LoadGuideRecording());
 
-        ResetSwingEndpoints();
-
         startEndpointRenderer = startSwing.gameObject.GetComponent<MeshRenderer>();
         endEndpointRenderer = endSwing.gameObject.GetComponent<MeshRenderer>();
+        // ResetSwingEndpoints();
     }
 
     void Update()
@@ -47,8 +46,8 @@ public class GameController : MonoBehaviour
             //
         } else if (state == GameState.WAIT_TRAJ) {
             guidePlayer.PlayGuideTrajectory();
-            // if (!TrajectoryTracker.TrackSwing())
-            //     changeState();
+            if (!tracker.TrackSwing())
+                changeState();
             
             // choose when to display/hide start/end points
             // add line render to user's swing while recording
@@ -85,16 +84,18 @@ public class GameController : MonoBehaviour
 
     public void ResetSwingEndpoints()
     {
-        startEndpointRenderer.gameObject.SetActive(false);
-        endEndpointRenderer.gameObject.SetActive(false);
+        startEndpointRenderer.enabled = false;
+        endEndpointRenderer.enabled = false;
     }
 
     public void EnableStartSwing()
     {
-        startEndpointRenderer.gameObject.SetActive(true);
+        startEndpointRenderer.enabled = true;
+        tracker.SwingStarted();
     }
     public void EnableEndSwing()
     {
-        endEndpointRenderer.gameObject.SetActive(true);
+        endEndpointRenderer.enabled = true;
+        tracker.SwingEnded();
     }
 }

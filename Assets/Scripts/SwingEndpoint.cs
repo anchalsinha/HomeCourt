@@ -5,14 +5,14 @@ using UnityEngine;
 public class SwingEndpoint : MonoBehaviour
 {
     public bool starting;
-    public TrajectoryTracker trajectoryTracker;
+    public GameController gameController;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
         Debug.Log("Collision Enter");
         if (starting)
-            trajectoryTracker.SwingStarted();
+            gameController.EnableStartSwing();
         else
-            trajectoryTracker.SwingEnded();
+            gameController.EnableEndSwing();
     }
 }

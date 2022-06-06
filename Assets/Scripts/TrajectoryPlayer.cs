@@ -49,7 +49,7 @@ public class TrajectoryPlayer : MonoBehaviour
 
     private (Snapshot prev, Snapshot next) GetSnapshots()
     {
-        while (currSnapshot < snapshots.Count - 1)
+        while (currSnapshot < snapshots.Count - 2)
         {
             var s = snapshots[currSnapshot];
             if (s.Time >= time)
