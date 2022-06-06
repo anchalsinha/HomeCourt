@@ -6,42 +6,62 @@ using UnityEngine;
 using Oculus.Interaction.Input;
 using Newtonsoft.Json;
 
-public class TrajectoryTracker : MonoBehaviour
+public class TrajectoryRecorder : MonoBehaviour
 {
-    public GameObject rightHand;
-    public GameObject startSwing, endSwing;
+    public GameObject rightHand, leftHand;
+    public GameObject guideHand;
 
     private Hand gestureHand;
 
-    private bool isRecording = false;
+    private bool isRecording;
 
     private List<Transform> recordedTransforms = new List<Transform>();
     private List<Snapshot> recording = new List<Snapshot>();
+    private int count = 0;
+
+
+    private GameObject playbackHandInstance;
+
 
     void Start()
     {
+        gestureHand = leftHand.GetComponent<Hand>();
         recordedTransforms = rightHand.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
+        Debug.Log($"Recorded transforms: {recordedTransforms.Count}");
+
     }
 
-    public bool TrackSwing() {
-        // if (!isRecording && COLLIDE_POINT_A) {
-        //     isRecording = true;
-        //     Debug.Log("Start Recording");
-        // }
-
-        if (isRecording)
+    void Update()
+    {
+        if (gestureHand.GetFingerIsPinching(HandFinger.Index))
+        {
+            if (!isRecording)
+            {
+                Debug.Log("Start Recording");
+                isRecording = true;
+            }
             TakeSnapshot();
-        
-        // if (isRecording && COLLIDE_POINT_B) {
-        //     isRecording = false;
-        //     Debug.Log("Stop Recording");
-        //     SerializeRecording();
-        //     return false;
-        // }
+        }
+        else
+        {
+            if (isRecording)
+            {
+                isRecording = false;
+                count++;
+                Debug.Log("Stop Recording");
 
-        return true;
+                // show playback
+                if (playbackHandInstance)
+                    Destroy(playbackHandInstance);
+                playbackHandInstance = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
+                var guidePlayer = playbackHandInstance.GetComponent<TrajectoryPlayer>();
+                guidePlayer.Load(recording);
+
+                SerializeRecording();
+            }
+        }
     }
-    
+
     void TakeSnapshot() 
     {
         var states = new State[recordedTransforms.Count];
