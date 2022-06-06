@@ -10,15 +10,14 @@ public class TrajectoryTracker : MonoBehaviour
 {
     public GameObject rightHand, leftHand;
     public GameObject guideHand;
+    public GameObject startSwing, endSwing;
 
     private Hand gestureHand;
 
-    private bool isRecording;
+    private bool isRecording = false;
 
     private List<Transform> recordedTransforms = new List<Transform>();
     private List<Snapshot> recording = new List<Snapshot>();
-    private int count = 0;
-
 
     private GameObject playbackHandInstance;
 
@@ -33,33 +32,52 @@ public class TrajectoryTracker : MonoBehaviour
 
     void Update()
     {
-        if (gestureHand.GetFingerIsPinching(HandFinger.Index))
-        {
-            if (!isRecording)
-            {
-                Debug.Log("Start Recording");
-                isRecording = true;
-            }
+        // if (gestureHand.GetFingerIsPinching(HandFinger.Index))
+        // {
+        //     if (!isRecording)
+        //     {
+        //         Debug.Log("Start Recording");
+        //         isRecording = true;
+        //     }
+        //     TakeSnapshot();
+        // }
+        // else
+        // {
+        //     if (isRecording)
+        //     {
+        //         isRecording = false;
+        //         count++;
+        //         Debug.Log("Stop Recording");
+
+        //         // show playback
+        //         if (playbackHandInstance)
+        //             Destroy(playbackHandInstance);
+        //         playbackHandInstance = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
+        //         var guidePlayer = playbackHandInstance.GetComponent<TrajectoryPlayer>();
+        //         guidePlayer.Load(recording);
+
+        //         SerializeRecording();
+        //     }
+        // }
+    }
+
+    public bool TrackSwing() {
+        // if (!isRecording && COLLIDE_POINT_A) {
+        //     isRecording = true;
+        //     Debug.Log("Start Recording");
+        // }
+
+        if (isRecording)
             TakeSnapshot();
-        }
-        else
-        {
-            if (isRecording)
-            {
-                isRecording = false;
-                count++;
-                Debug.Log("Stop Recording");
+        
+        // if (isRecording && COLLIDE_POINT_B) {
+        //     isRecording = false;
+        //     Debug.Log("Stop Recording");
+        //     SerializeRecording();
+        //     return false;
+        // }
 
-                // show playback
-                if (playbackHandInstance)
-                    Destroy(playbackHandInstance);
-                playbackHandInstance = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
-                var guidePlayer = playbackHandInstance.GetComponent<TrajectoryPlayer>();
-                guidePlayer.Load(recording);
-
-                SerializeRecording();
-            }
-        }
+        return true;
     }
 
     void TakeSnapshot() 
