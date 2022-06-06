@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class Constants
+{
+    public static int PALM_CENTER_MARKER_ID = 61;
+}
+
 [Serializable]
 public struct State 
 {
