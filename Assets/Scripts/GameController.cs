@@ -39,8 +39,9 @@ public class GameController : MonoBehaviour
             //
         } else if (state == GameState.WAIT_TRAJ) {
             guidePlayer.PlayGuideTrajectory();
-            if (!TrajectoryTracker.TrackSwing())
-                changeState();
+            // if (!TrajectoryTracker.TrackSwing())
+            //     changeState();
+            
             // choose when to display/hide start/end points
             // add line render to user's swing while recording
         } else if (state == GameState.EVAL_TRAJ) {
