@@ -225,7 +225,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 613359464}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -404,12 +404,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1355224968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a82518edf0a9449e485bb8241c22299f, type: 3}
+  m_Script: {fileID: 11500000, guid: 18e3db765587c4875b5fb0f68f8d72a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightHand: {fileID: 131476713840954146}
-  startSwing: {fileID: 0}
-  endSwing: {fileID: 0}
+  timeScale: 1
+  startSwing: {fileID: 1460505258}
+  endSwing: {fileID: 613359464}
+  lineWidth: 0
 --- !u!1 &1460505258
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +450,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460505258}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -760,8 +761,3 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3963276905469515055, guid: 61197b333efce455ab5605bdca42a1cd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 61197b333efce455ab5605bdca42a1cd, type: 3}
---- !u!1 &131476713840954146 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3995619086441185644, guid: 61197b333efce455ab5605bdca42a1cd, type: 3}
-  m_PrefabInstance: {fileID: 131476713840954145}
-  m_PrefabAsset: {fileID: 0}
