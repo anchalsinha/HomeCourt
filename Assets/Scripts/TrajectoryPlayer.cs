@@ -43,18 +43,19 @@ public class TrajectoryPlayer : MonoBehaviour
 
     private void Update()
     {
-        PlayGuideTrajectory();
+        // PlayGuideTrajectory();
     }
 
     private (Snapshot prev, Snapshot next) GetSnapshots()
     {
-        while (true)
+        while (currSnapshot < snapshots.Count - 1)
         {
             var s = snapshots[currSnapshot];
             if (s.Time >= time)
                 break;
             currSnapshot++;
         }
+        Debug.Log($"Current snapshot: {currSnapshot}");
 
         var prev = snapshots[currSnapshot - 1];
         var next = snapshots[currSnapshot];
@@ -66,7 +67,10 @@ public class TrajectoryPlayer : MonoBehaviour
             return false;
         
         if (currSnapshot >= snapshots.Count - 1)
+        {
             currSnapshot = 0;
+            time = 0;
+        }
 
         time = Mathf.Clamp(time + Time.deltaTime * timeScale, minTime, maxTime);
                 
@@ -82,7 +86,7 @@ public class TrajectoryPlayer : MonoBehaviour
             transform.eulerAngles = Quaternion.Lerp(Quaternion.Euler(prevState.Rotation), Quaternion.Euler(nextState.Rotation), snapshotDelta).eulerAngles;
             transform.localScale = Vector3.Lerp(prevState.Scale, nextState.Scale, snapshotDelta);
         }
-        currSnapshot++;
+        // currSnapshot++;
 
         return true;
     }

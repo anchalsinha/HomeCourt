@@ -3,41 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHHA68SH2044",
         "name": "com.UCLA.InteractiveSystemsFinalProject",
-        "processId": 26174,
+        "processId": 15470,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "1WMHHA68SH2044",
-            "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 13276,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHHA68SH2044",
-            "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 13646,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHHA68SH2044",
-            "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 14003,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHHA68SH2044",
-            "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 14308,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHHA68SH2044",
-            "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 15106,
-            "exited": true
-        },
         {
             "deviceId": "1WMHHA68SH2044",
             "name": "com.oculus.shellenv",
@@ -47,25 +17,103 @@
         {
             "deviceId": "1WMHHA68SH2044",
             "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 7545,
+            "processId": 31378,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 32006,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 832,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 1785,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 4312,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 5753,
             "exited": false
         },
         {
             "deviceId": "1WMHHA68SH2044",
             "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 15000,
+            "processId": 7066,
             "exited": false
         },
         {
             "deviceId": "1WMHHA68SH2044",
             "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 18016,
+            "processId": 7411,
             "exited": false
         },
         {
             "deviceId": "1WMHHA68SH2044",
             "name": "com.UCLA.InteractiveSystemsFinalProject",
-            "processId": 26174,
+            "processId": 7826,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 8663,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 11044,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 11756,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 12386,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 12762,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 14005,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 14716,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHHA68SH2044",
+            "name": "com.UCLA.InteractiveSystemsFinalProject",
+            "processId": 15470,
             "exited": false
         }
     ],

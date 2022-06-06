@@ -29,8 +29,8 @@ public class GameController : MonoBehaviour
         guidePlayer = guideHand.GetComponent<TrajectoryPlayer>();
         // tracker = GetComponent<TrajectoryTracker>();
         
-        // StartCoroutine(LoadGuideRecording());
-        LoadGuideRecording();
+        StartCoroutine(LoadGuideRecording());
+        // LoadGuideRecording();
     }
 
     void Update()
@@ -60,11 +60,12 @@ public class GameController : MonoBehaviour
         Debug.Log(state);
     }
 
-    void LoadGuideRecording()
+    IEnumerator LoadGuideRecording()
     {
-        byte[] raw = File.ReadAllBytes(Path.Combine(Application.streamingAssetsPath, trajectoryFilename));
+        var loadRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, trajectoryFilename));
+        yield return loadRequest.SendWebRequest();
 
-        List<Snapshot> recording = JsonConvert.DeserializeObject<List<Snapshot>>(Encoding.UTF8.GetString(raw));
+        List<Snapshot> recording = JsonConvert.DeserializeObject<List<Snapshot>>(Encoding.UTF8.GetString(loadRequest.downloadHandler.data));
         guidePlayer.Load(recording);
 
         if (state == GameState.START)
