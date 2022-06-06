@@ -13,30 +13,46 @@ public class TrajectoryTracker : MonoBehaviour
     private Hand gestureHand;
 
     private bool isRecording = false;
+    private bool swingStarted, swingEnded = false;
 
     private List<Transform> recordedTransforms = new List<Transform>();
     private List<Snapshot> recording = new List<Snapshot>();
 
+    private GameController gameController;
+
     void Start()
     {
         recordedTransforms = rightHand.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
+        gameController = GetComponent<GameController>();
+    }
+
+    public void SwingStarted()
+    {
+        swingStarted = true;
+        gameController.EnableStartSwing();
+    }
+
+    public void SwingEnded()
+    {
+        gameController.EnableEndSwing();
     }
 
     public bool TrackSwing() {
-        // if (!isRecording && COLLIDE_POINT_A) {
-        //     isRecording = true;
-        //     Debug.Log("Start Recording");
-        // }
+        if (!isRecording && swingStarted) {
+            isRecording = true;
+            Debug.Log("Start Recording");
+        }
 
         if (isRecording)
             TakeSnapshot();
         
-        // if (isRecording && COLLIDE_POINT_B) {
-        //     isRecording = false;
-        //     Debug.Log("Stop Recording");
-        //     SerializeRecording();
-        //     return false;
-        // }
+        if (isRecording && swingEnded) {
+            isRecording = false;
+            Debug.Log("Stop Recording");
+            swingStarted = false;
+            SerializeRecording();
+            return false;
+        }
 
         return true;
     }

@@ -9,8 +9,6 @@ public class TrajectoryPlayer : MonoBehaviour
     private List<Snapshot> snapshots;
     private int currSnapshot = 0;
     private List<Transform> transforms;
-    
-    public GameObject startSwing, endSwing;
 
     private float time = 0;
     private float minTime;
@@ -23,13 +21,6 @@ public class TrajectoryPlayer : MonoBehaviour
     public void Start()
     {
         transforms = GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
-
-        startSwing = GetComponent<GameObject>();
-        startSwing.transform.position = snapshots[0].States[Constants.PALM_CENTER_MARKER_ID].Position;
-        endSwing = GetComponent<GameObject>();
-        endSwing.transform.position = snapshots[snapshots.Count - 1].States[Constants.PALM_CENTER_MARKER_ID].Position;
-
-        // endSwing.setActive(false);
     }
 
     public void Load(List<Snapshot> recording)
@@ -65,10 +56,9 @@ public class TrajectoryPlayer : MonoBehaviour
                 break;
             currSnapshot++;
         }
-        Debug.Log($"Current snapshot: {currSnapshot}");
 
-        var prev = snapshots[currSnapshot - 1];
-        var next = snapshots[currSnapshot];
+        var prev = snapshots[currSnapshot];
+        var next = snapshots[currSnapshot + 1];
         return (prev, next);
     }
 
@@ -76,7 +66,7 @@ public class TrajectoryPlayer : MonoBehaviour
         if (snapshots.Count == 0)
             return false;
         
-        if (currSnapshot >= snapshots.Count - 1)
+        if (currSnapshot >= snapshots.Count - 2)
         {
             currSnapshot = 0;
             time = 0;

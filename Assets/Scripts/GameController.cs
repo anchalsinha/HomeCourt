@@ -18,8 +18,12 @@ public class GameController : MonoBehaviour
     public string trajectoryFilename;
     private GameState state;
 
+    public Transform startSwing, endSwing;
+
     private TrajectoryPlayer guidePlayer;
     private TrajectoryTracker tracker;
+
+    private MeshRenderer startEndpointRenderer, endEndpointRenderer;
 
     void Start()
     {
@@ -27,10 +31,14 @@ public class GameController : MonoBehaviour
         Debug.Log(state);
 
         guidePlayer = guideHand.GetComponent<TrajectoryPlayer>();
-        // tracker = GetComponent<TrajectoryTracker>();
+        tracker = GetComponent<TrajectoryTracker>();
         
         StartCoroutine(LoadGuideRecording());
-        // LoadGuideRecording();
+
+        ResetSwingEndpoints();
+
+        startEndpointRenderer = startSwing.gameObject.GetComponent<MeshRenderer>();
+        endEndpointRenderer = endSwing.gameObject.GetComponent<MeshRenderer>();
     }
 
     void Update()
@@ -68,7 +76,25 @@ public class GameController : MonoBehaviour
         List<Snapshot> recording = JsonConvert.DeserializeObject<List<Snapshot>>(Encoding.UTF8.GetString(loadRequest.downloadHandler.data));
         guidePlayer.Load(recording);
 
+        startSwing.position = recording[0].States[Constants.PALM_CENTER_MARKER_ID].Position;
+        endSwing.position = recording[recording.Count - 1].States[Constants.PALM_CENTER_MARKER_ID].Position;
+
         if (state == GameState.START)
             changeState();
+    }
+
+    public void ResetSwingEndpoints()
+    {
+        startEndpointRenderer.gameObject.SetActive(false);
+        endEndpointRenderer.gameObject.SetActive(false);
+    }
+
+    public void EnableStartSwing()
+    {
+        startEndpointRenderer.gameObject.SetActive(true);
+    }
+    public void EnableEndSwing()
+    {
+        endEndpointRenderer.gameObject.SetActive(true);
     }
 }
