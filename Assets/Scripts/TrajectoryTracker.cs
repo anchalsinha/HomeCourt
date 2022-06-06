@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 public class TrajectoryTracker : MonoBehaviour
 {
     public GameObject rightHand;
-    public GameObject startSwing, endSwing;
 
     private Hand gestureHand;
 
@@ -21,11 +20,6 @@ public class TrajectoryTracker : MonoBehaviour
     void Start()
     {
         recordedTransforms = rightHand.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
-
-        startSwing = GetComponent<GameObject>();
-        // startSwing.transform.position = CENTER PALM POSITION 0
-        endSwing = GetComponent<GameObject>();
-        // endSwing.transform.position = CENTER PALM POSITION COUNT-1;
     }
 
     public bool TrackSwing() {
