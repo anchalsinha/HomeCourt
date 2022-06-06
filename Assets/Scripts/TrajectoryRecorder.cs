@@ -25,6 +25,7 @@ public class TrajectoryRecorder : MonoBehaviour
 
     void Start()
     {
+        OVRManager.display.RecenterPose();
         gestureHand = leftHand.GetComponent<Hand>();
         recordedTransforms = rightHand.GetComponentsInChildren<Transform>().Where(t => t.tag == "Trackable").ToList();
         Debug.Log($"Recorded transforms: {recordedTransforms.Count}");
@@ -55,6 +56,7 @@ public class TrajectoryRecorder : MonoBehaviour
                     Destroy(playbackHandInstance);
                 playbackHandInstance = Instantiate(guideHand, Vector3.zero, Quaternion.identity);
                 var guidePlayer = playbackHandInstance.GetComponent<TrajectoryPlayer>();
+                guidePlayer.autoPlay = true;
                 guidePlayer.Load(recording);
 
                 SerializeRecording();

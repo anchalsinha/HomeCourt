@@ -6,6 +6,8 @@ using UnityEngine;
 public class TrajectoryPlayer : MonoBehaviour
 {
     [SerializeField] private float timeScale = 1;
+    public bool autoPlay = false;
+
     private List<Snapshot> snapshots;
     private int currSnapshot = 0;
     private List<Transform> transforms;
@@ -46,7 +48,8 @@ public class TrajectoryPlayer : MonoBehaviour
 
     private void Update()
     {
-        // PlayGuideTrajectory();
+        if (autoPlay)
+            PlayGuideTrajectory();
     }
 
     private (Snapshot prev, Snapshot next) GetSnapshots()

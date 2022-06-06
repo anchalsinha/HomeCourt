@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using Oculus;
 
 public enum GameState {
     START,
@@ -21,14 +22,19 @@ public class GameController : MonoBehaviour
     private GameState state;
 
     public Transform startSwing, endSwing;
+    public GameObject tennisBall;
 
     private TrajectoryPlayer guidePlayer;
     private TrajectoryTracker tracker;
 
     private MeshRenderer startEndpointRenderer, endEndpointRenderer;
 
+    private bool inEvaluatingState = false;
+
     void Start()
     {
+        OVRManager.display.RecenterPose();
+
         state = GameState.START;
         Debug.Log(state);
 
@@ -40,6 +46,9 @@ public class GameController : MonoBehaviour
         startEndpointRenderer = startSwing.gameObject.GetComponent<MeshRenderer>();
         endEndpointRenderer = endSwing.gameObject.GetComponent<MeshRenderer>();
         // ResetSwingEndpoints();
+
+        Instantiate(tennisBall);
+
     }
 
     void Update()
@@ -58,13 +67,26 @@ public class GameController : MonoBehaviour
             // evaluate using metric
             // display score/grade based on metric results
             // reset back to WAIT_TRAJ state via changeState();
-
-            var trajectory = tracker.GetTrajectoryRecording();
-            var guide = guidePlayer.smoothTrajectory;
-            float metric = EvaluateTrajectory(trajectory, guide);
-            Debug.Log($"Eval result: {metric}");
-            changeState();
+            if (!inEvaluatingState)
+                StartCoroutine(EvaluateState());
+            
         }
+    }
+
+    IEnumerator EvaluateState()
+    {
+        inEvaluatingState = true;
+        var trajectory = tracker.GetTrajectoryRecording();
+        var guide = guidePlayer.smoothTrajectory;
+        yield return trajectory;
+        float metric = EvaluateTrajectory(trajectory, guide);
+        Debug.Log($"Eval result: {metric}");
+
+        yield return new WaitForSeconds(0.5f);
+        Instantiate(tennisBall);
+
+        changeState();
+        inEvaluatingState = false;
     }
 
     void changeState() {
@@ -77,7 +99,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator LoadGuideRecording()
     {
-        var loadRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, trajectoryFilename));
+        var loadRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, $"{trajectoryFilename}.json"));
         yield return loadRequest.SendWebRequest();
 
         List<Snapshot> recording = JsonConvert.DeserializeObject<List<Snapshot>>(Encoding.UTF8.GetString(loadRequest.downloadHandler.data));
