@@ -14,6 +14,8 @@ public class TrajectoryPlayer : MonoBehaviour
     private float minTime;
     private float maxTime;
 
+    internal List<Vector3> smoothTrajectory;
+
     private LineRenderer lineRenderer;
     public float lineWidth;
 
@@ -32,14 +34,14 @@ public class TrajectoryPlayer : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
-        lineRenderer.positionCount = snapshots.Count;
 
-        Vector3 pos;
+        List<Vector3> positions = new List<Vector3>();
         for (int i = 0; i < snapshots.Count; i++)
-        {
-            pos = snapshots[i].States[Constants.PALM_CENTER_MARKER_ID].Position;
-            lineRenderer.SetPosition(i, new Vector3(pos.x, pos.y, pos.z));
-        }
+            positions.Add(snapshots[i].States[Constants.PALM_CENTER_MARKER_ID].Position);
+        positions = Utilities.Discretize(positions);
+        lineRenderer.positionCount = positions.Count;
+        lineRenderer.SetPositions(positions.ToArray());
+        smoothTrajectory = positions;
     }
 
     private void Update()

@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 
@@ -56,6 +58,12 @@ public class GameController : MonoBehaviour
             // evaluate using metric
             // display score/grade based on metric results
             // reset back to WAIT_TRAJ state via changeState();
+
+            var trajectory = tracker.GetTrajectoryRecording();
+            var guide = guidePlayer.smoothTrajectory;
+            float metric = EvaluateTrajectory(trajectory, guide);
+            Debug.Log($"Eval result: {metric}");
+            changeState();
         }
     }
 
@@ -97,5 +105,19 @@ public class GameController : MonoBehaviour
     {
         endEndpointRenderer.enabled = true;
         tracker.SwingEnded();
+    }
+
+    private float EvaluateTrajectory(List<Vector3> trajectory, List<Vector3> guide)
+    {
+        float total = 0.0f;
+        Assert.IsTrue(trajectory.Count == guide.Count);
+
+        int n = trajectory.Count;
+        for (int i = 0; i < n; i++)
+        {
+            total += (trajectory[i] - guide[i]).sqrMagnitude;
+        }
+        
+        return total / n;
     }
 }

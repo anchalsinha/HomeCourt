@@ -16,7 +16,7 @@ public class TrajectoryTracker : MonoBehaviour
     private bool swingStarted, swingEnded = false;
 
     private List<Transform> recordedTransforms = new List<Transform>();
-    private List<Snapshot> recording = new List<Snapshot>();
+    private List<Vector3> recording = new List<Vector3>();
 
     public float lineWidth;
     private LineRenderer lineRenderer;
@@ -36,6 +36,7 @@ public class TrajectoryTracker : MonoBehaviour
     public void SwingStarted()
     {
         swingStarted = true;
+        lineRenderer.positionCount = 0;
     }
 
     public void SwingEnded()
@@ -61,6 +62,12 @@ public class TrajectoryTracker : MonoBehaviour
             Debug.Log("Stop Recording");
             swingStarted = false;
             swingEnded = false;
+
+            List<Vector3> smoothTrajectory = Utilities.Discretize(recording);
+            lineRenderer.positionCount = smoothTrajectory.Count;
+            lineRenderer.SetPositions(smoothTrajectory.ToArray());
+            recording = smoothTrajectory;
+
             return false;
         }
 
@@ -79,26 +86,17 @@ public class TrajectoryTracker : MonoBehaviour
             state.Scale = t.lossyScale;
             states[i] = state;
         }
-        var snapshot = new Snapshot();
-        snapshot.Time = Time.time;
-        snapshot.States = states;
 
-        recording.Add(snapshot);
         lineRenderer.positionCount += 1;
         Vector3 pos = states[Constants.PALM_CENTER_MARKER_ID].Position;
         lineRenderer.SetPosition(lineRenderer.positionCount - 1, new Vector3(pos.x, pos.y, pos.z));
+        recording.Add(pos);
     }
 
-    void SerializeRecording()
+    public List<Vector3> GetTrajectoryRecording()
     {
-        string recording_string = JsonConvert.SerializeObject(recording);
+        var ret = new List<Vector3>(recording);
         recording.Clear();
-
-        string fname = System.DateTime.Now.ToString("HH-mm-ss") + ".json";
-        string path = Path.Combine(Application.persistentDataPath, fname);
-        Debug.Log($"Recording saved: {path}");
-        StreamWriter writer = new StreamWriter(path);
-        writer.WriteLine(recording_string);
-        writer.Close();
+        return ret;
     }
 }
