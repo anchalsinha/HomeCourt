@@ -128,5 +128,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifespan: 2
-  force: 15
+  force: 12
   direction: {x: 0, y: 0.4, z: 1}

@@ -89,6 +89,11 @@ public class GameController : MonoBehaviour
         float metric = EvaluateTrajectory(trajectory, guide);
         Debug.Log($"Eval result: {metric}");
 
+        grade = getGrade(metric);
+
+        UpdateText(scoreText, grade.ToString());
+        UpdateText(feedbackText, GetScoreFeedback());
+
         yield return new WaitForSeconds(0.5f);
         Instantiate(tennisBall);
 
@@ -139,13 +144,13 @@ public class GameController : MonoBehaviour
     }
 
     private char getGrade(float score) {
-        if (score >= ScoreConstants.SCORE_THRESH_A)
+        if (score <= ScoreConstants.SCORE_THRESH_A)
             return 'A';
-        else if (score < ScoreConstants.SCORE_THRESH_A && score >= ScoreConstants.SCORE_THRESH_B)
+        else if (score > ScoreConstants.SCORE_THRESH_A && score <= ScoreConstants.SCORE_THRESH_B)
             return 'B';
-        else if (score < ScoreConstants.SCORE_THRESH_B && score >= ScoreConstants.SCORE_THRESH_C)
+        else if (score > ScoreConstants.SCORE_THRESH_B && score <= ScoreConstants.SCORE_THRESH_C)
             return 'C';
-        else if (score < ScoreConstants.SCORE_THRESH_C && score >= ScoreConstants.SCORE_THRESH_D)
+        else if (score > ScoreConstants.SCORE_THRESH_C && score <= ScoreConstants.SCORE_THRESH_D)
             return 'D';
         else
             return 'F';
@@ -202,6 +207,6 @@ public class GameController : MonoBehaviour
             total += (trajectory[i] - guide[i]).sqrMagnitude;
         }
         
-        return total / n;
+        return 10 * total / n;
     }
 }

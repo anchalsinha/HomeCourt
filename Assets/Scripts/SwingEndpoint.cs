@@ -9,7 +9,6 @@ public class SwingEndpoint : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Collision Enter");
         if (starting)
             gameController.EnableStartSwing();
         else

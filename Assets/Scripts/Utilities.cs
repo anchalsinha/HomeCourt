@@ -24,10 +24,10 @@ public static class TextConstants
 
 public static class ScoreConstants
 {
-    public static float SCORE_THRESH_A = 0.90f;
-    public static float SCORE_THRESH_B = 0.80f;
-    public static float SCORE_THRESH_C = 0.70f;
-    public static float SCORE_THRESH_D = 0.60f;
+    public static float SCORE_THRESH_A = 0.75f;
+    public static float SCORE_THRESH_B = 0.82f;
+    public static float SCORE_THRESH_C = 0.90f;
+    public static float SCORE_THRESH_D = 0.98f;
 }
 
 public static class Utilities

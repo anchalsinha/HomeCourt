@@ -23,7 +23,6 @@ public class Ball : MonoBehaviour
 
     public void OnCollisionEnter(Collision collisionInfo)
     {
-        Debug.Log("Ball Collision!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (collisionInfo.collider.name == "Racquet Collider" && !hit)
         {
             hit = true;
