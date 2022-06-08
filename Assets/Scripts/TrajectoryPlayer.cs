@@ -24,7 +24,7 @@ public class TrajectoryPlayer : MonoBehaviour
     public GameObject head;
     private float minHeight;
     private float headPos;
-    [SerializeField] private float heightOffset = 0.10f;
+    public float heightOffset = 0.10f;
 
     public void Start()
     {

@@ -19,6 +19,8 @@ public enum GameState {
 public class GameController : MonoBehaviour
 {
     public GameObject guideHand;
+    public GameObject head;
+    public float heightOffset = 0.10f;
     public string trajectoryFilename;
     private GameState state;
 
@@ -45,6 +47,8 @@ public class GameController : MonoBehaviour
         Debug.Log(state);
 
         guidePlayer = guideHand.GetComponent<TrajectoryPlayer>();
+        guidePlayer.head = head;
+        guidePlayer.heightOffset = heightOffset;
         tracker = GetComponent<TrajectoryTracker>();
         
         StartCoroutine(LoadGuideRecording());
