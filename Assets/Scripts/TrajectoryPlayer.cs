@@ -21,6 +21,10 @@ public class TrajectoryPlayer : MonoBehaviour
     private LineRenderer lineRenderer;
     public float lineWidth;
 
+    public GameObject head;
+    private float minHeight;
+    private float headPos;
+    [SerializeField] private float heightOffset = 0.10f;
 
     public void Start()
     {
@@ -44,6 +48,14 @@ public class TrajectoryPlayer : MonoBehaviour
         lineRenderer.positionCount = positions.Count;
         lineRenderer.SetPositions(positions.ToArray());
         smoothTrajectory = positions;
+
+        // find min height in guide recording (for camera adjustment)
+        minHeight = positions[0].y;
+        for (int i = 1; i < positions.Count; i++) {
+            if (positions[i].y < minHeight) {
+                minHeight = positions[i].y;
+            }
+        }
     }
 
     private void Update()
@@ -77,6 +89,10 @@ public class TrajectoryPlayer : MonoBehaviour
             time = 0;
         }
 
+        if (currSnapshot == 0) {
+            headPos = head.transform.position.y;
+        }
+
         time = Mathf.Clamp(time + Time.deltaTime * timeScale, minTime, maxTime);
                 
         var (prev, next) = GetSnapshots();
@@ -87,6 +103,11 @@ public class TrajectoryPlayer : MonoBehaviour
             var transform = transforms[i];
             var prevState = prev.States[i];
             var nextState = next.States[i];
+            
+            // adjust guide height based on user head position
+            prevState.Position.y = (prevState.Position.y - minHeight) + (headPos - heightOffset);
+            nextState.Position.y = (nextState.Position.y - minHeight) + (headPos - heightOffset);
+            
             transform.position = Vector3.Lerp(prevState.Position, nextState.Position, snapshotDelta);
             transform.eulerAngles = Quaternion.Lerp(Quaternion.Euler(prevState.Rotation), Quaternion.Euler(nextState.Rotation), snapshotDelta).eulerAngles;
             transform.localScale = Vector3.Lerp(prevState.Scale, nextState.Scale, snapshotDelta);
